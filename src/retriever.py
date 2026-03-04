@@ -1,10 +1,14 @@
+import streamlit as st
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# Load once globally (faster, no reloading every query)
-embedder = SentenceTransformer("all-MiniLM-L6-v2")
-client = chromadb.PersistentClient(path="./data/chromadb")
-collection = client.get_collection("docpilot")
+# Cache the heavy model loading so Streamlit doesn't reload it every interaction
+@st.cache_resource
+def load_models():
+    embedder = SentenceTransformer("all-MiniLM-L6-v2")
+    client = chromadb.PersistentClient(path="./data/chromadb")
+    collection = client.get_collection("docpilot")
+    return embedder, collection
 
 
 def retrieve(query, n_results=3):
@@ -16,6 +20,8 @@ def retrieve(query, n_results=3):
     → searches ChromaDB
     → returns top 3 most relevant chunks
     """
+    
+    embedder, collection = load_models()
     
     # Convert question to numbers (same way we converted docs)
     query_embedding = embedder.encode([query]).tolist()
