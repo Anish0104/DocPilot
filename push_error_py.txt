@@ -1,0 +1,26 @@
+remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cannot contain secrets        
+remote: 
+remote:             
+remote:      (?) Learn how to resolve a blocked push        
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push        
+remote:             
+remote:             
+remote:       —— Groq API Key ——————————————————————————————————————        
+remote:        locations:        
+remote:          - commit: 28616eb5fc19cba39b8b315db44de273adf92a70        
+remote:            path: .env:1        
+remote:             
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.        
+remote:        https://github.com/Anish0104/DocPilot/security/secret-scanning/unblock-secret/3ASuy04hOOcm1EWkraNaHy2MHsh        
+remote:             
+remote: 
+remote: 
+To https://github.com/Anish0104/DocPilot.git
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/Anish0104/DocPilot.git'
