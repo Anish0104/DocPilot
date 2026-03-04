@@ -326,6 +326,26 @@ div[data-testid="column"] .stButton > button:hover,
     border: 1px solid rgba(124,58,237,0.15); border-radius: 24px;
     padding: 2px 8px; color: var(--text-secondary); font-weight: 500;
 }
+
+/* ── NEW: Mobile Media Queries ── */
+@media (max-width: 768px) {
+    .main-wrap { padding: 0 16px; }
+    .cards-row { grid-template-columns: 1fr; gap: 12px; }
+    .nav-links { gap: 12px; }
+    .nav-link { font-size: 11px; }
+    .conv-header { 
+        padding: 16px 0 8px; 
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    /* Give chat input container some breathing room on mobile to avoid overlapping */
+    [data-testid="stChatInput"] {
+        padding-bottom: 24px !important;
+    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -464,6 +484,13 @@ else:
         <div class="conv-count">{n} question{"s" if n != 1 else ""}</div>
     </div>
     """, unsafe_allow_html=True)
+    
+    # ── NEW: Action row with Back button ──
+    col1, col2 = st.columns([1, 4])
+    with col1:
+        if st.button("← Back", use_container_width=True, key="back_btn"):
+            st.session_state.messages = []
+            st.rerun()
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
