@@ -75,23 +75,58 @@ body, * { font-family: 'Inter', sans-serif; }
 /* Kill stray white bars */
 [data-testid="stBottom"],
 [data-testid="stBottom"] > div,
-[data-testid="stBottom"] > div > div { background: var(--bg) !important; }
+[data-testid="stBottom"] > div > div,
+[data-testid="stBottom"] > div > div > div { background: var(--bg) !important; }
+
+/* Chat input wrapper — keep it on the page background */
+[data-testid="stChatInputContainer"],
+[data-testid="stChatInputContainer"] > div {
+    background: var(--bg) !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 8px 0 4px !important;
+}
 
 /* ── Columns layout: target sidebar column via :has() ── */
-div[data-testid="stColumn"]:has(> div > .sb-anchor) {
+div[data-testid="stColumn"]:has(.sb-anchor) {
     background: var(--sb-bg) !important;
     border-right: 1px solid rgba(255,255,255,.06) !important;
     padding: 0 !important;
     min-height: 100vh !important;
+    position: relative !important;
 }
-div[data-testid="stColumn"]:has(> div > .sb-anchor) > div {
+div[data-testid="stColumn"]:has(.sb-anchor) > div,
+div[data-testid="stColumn"]:has(.sb-anchor) [data-testid="stVerticalBlock"] {
     background: var(--sb-bg) !important;
     min-height: 100vh !important;
     padding: 0 !important;
 }
 
+/* Kill every Streamlit wrapper background inside the dark sidebar */
+div[data-testid="stColumn"]:has(.sb-anchor) .stMarkdown,
+div[data-testid="stColumn"]:has(.sb-anchor) .element-container,
+div[data-testid="stColumn"]:has(.sb-anchor) [data-testid="element-container"],
+div[data-testid="stColumn"]:has(.sb-anchor) [data-testid="stVerticalBlock"],
+div[data-testid="stColumn"]:has(.sb-anchor) [data-testid="stVerticalBlockBorderWrapper"],
+div[data-testid="stColumn"]:has(.sb-anchor) .stMarkdown > div,
+div[data-testid="stColumn"]:has(.sb-anchor) .stMarkdown p,
+div[data-testid="stColumn"]:has(.sb-anchor) .stMarkdown div {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+/* Force all text inside sidebar to correct colours */
+div[data-testid="stColumn"]:has(.sb-anchor) .stMarkdown *:not(button):not(.stButton *) {
+    color: inherit !important;
+}
+
+/* Remove gap between sidebar and main columns */
+[data-testid="stHorizontalBlock"]:has(.sb-anchor) {
+    gap: 0 !important;
+    align-items: stretch !important;
+}
+
 /* ── Sidebar buttons ── */
-div[data-testid="stColumn"]:has(> div > .sb-anchor) .stButton button {
+div[data-testid="stColumn"]:has(.sb-anchor) .stButton button {
     background: rgba(255,255,255,.04) !important;
     border: 1px solid rgba(255,255,255,.08) !important;
     border-radius: 9px !important;
@@ -104,18 +139,18 @@ div[data-testid="stColumn"]:has(> div > .sb-anchor) .stButton button {
     transition: all .15s !important;
     line-height: 1.45 !important;
 }
-div[data-testid="stColumn"]:has(> div > .sb-anchor) .stButton button:hover {
+div[data-testid="stColumn"]:has(.sb-anchor) .stButton button:hover {
     background: rgba(124,58,237,.2) !important;
     border-color: rgba(124,58,237,.4) !important;
     color: #E2D4FF !important;
 }
-div[data-testid="stColumn"]:has(> div > .sb-anchor) hr {
+div[data-testid="stColumn"]:has(.sb-anchor) hr {
     border-color: rgba(255,255,255,.07) !important;
     margin: 6px 0 !important;
 }
 
 /* ── Main column padding ── */
-div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) {
+div[data-testid="stColumn"]:not(:has(.sb-anchor)) {
     padding: 0 28px 0 24px !important;
 }
 
@@ -277,7 +312,7 @@ div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) {
 }
 
 /* ── Welcome chip buttons (nested columns inside main col) ── */
-div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) div[data-testid="stColumn"] .stButton button {
+div[data-testid="stColumn"]:not(:has(.sb-anchor)) div[data-testid="stColumn"] .stButton button {
     background: var(--surface) !important;
     border: 1.5px solid var(--border) !important;
     border-radius: 12px !important;
@@ -288,7 +323,7 @@ div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) div[data-testid="stCol
     transition: all .16s !important;
     width: 100% !important;
 }
-div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) div[data-testid="stColumn"] .stButton button:hover {
+div[data-testid="stColumn"]:not(:has(.sb-anchor)) div[data-testid="stColumn"] .stButton button:hover {
     background: var(--accent-pale) !important;
     border-color: rgba(124,58,237,.35) !important;
     color: var(--accent) !important;
@@ -442,7 +477,7 @@ div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) div[data-testid="stCol
     .cards { grid-template-columns: 1fr; }
     [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"])     { margin-left: 5% !important; }
     [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) { margin-right: 5% !important; }
-    div[data-testid="stColumn"]:not(:has(> div > .sb-anchor)) { padding: 0 12px !important; }
+    div[data-testid="stColumn"]:not(:has(.sb-anchor)) { padding: 0 12px !important; }
 }
 </style>
 """, unsafe_allow_html=True)
