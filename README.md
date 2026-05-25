@@ -1,53 +1,97 @@
 # DocPilot
 
-DocPilot is an AI Documentation Assistant that provides precise, source-cited answers to questions about the HuggingFace, PyTorch, and Scikit-learn documentation. 
+DocPilot is an AI documentation assistant that gives precise, source-cited answers about HuggingFace, PyTorch, and Scikit-learn. Ask a question in plain English and get a direct answer backed by the official docs.
 
-It uses a Retrieval-Augmented Generation (RAG) architecture powered by ChromaDB for local vector search and Groq's LLaMA 3.1 model for fast, accurate generation.
+Built with a RAG (Retrieval-Augmented Generation) pipeline — no hallucinations, every answer traces back to a real source.
 
-## Features
+**Live demo**: [docpilot.streamlit.app](https://docpilot.streamlit.app)
 
-- **Multi-Library Knowledge Base**: Covers HuggingFace (Transformers, Datasets, Pipelines), PyTorch (Tensors, Autograd, Model Building), and Scikit-learn (Classical ML).
-- **Source Citations**: Every answer includes direct links to the official documentation sources.
-- **Modern UI**: A premium, glassmorphic Streamlit interface. 
-- **100% Free Stack**: Built entirely with free and open-source tools (Streamlit, ChromaDB locally, Groq free tier).
+---
 
-## Setup Instructions
+## How it works
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Anish0104/DocPilot.git
-   cd DocPilot
-   ```
+1. **Ingest** — documentation pages are scraped, chunked, embedded with `all-MiniLM-L6-v2`, and stored in a local ChromaDB vector store.
+2. **Retrieve** — your question is embedded the same way and the top-3 most semantically similar chunks are fetched.
+3. **Generate** — the chunks are passed as context to LLaMA 3.1 (via Groq) which produces a focused, grounded answer.
 
-2. **Create a virtual environment (Optional but Recommended)**
-   ```bash
-   python -m venv venv
-   source venv/Scripts/activate  # On Windows
-   # source venv/bin/activate    # On macOS/Linux
-   ```
+```
+User question
+    │
+    ▼
+Sentence-Transformers (embed)
+    │
+    ▼
+ChromaDB (semantic search → top 3 chunks)
+    │
+    ▼
+Groq / LLaMA 3.1 (generate answer from chunks)
+    │
+    ▼
+Answer + source links
+```
 
-3. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-4. **Add your API Key**
-   Create a `.env` file in the root directory and add your Groq API key:
-   ```env
-   GROQ_API_KEY=your_groq_api_key_here
-   ```
+## Stack
 
-5. **Run the Application**
-   ```bash
-   streamlit run app.py
-   ```
+| Layer | Tool |
+|---|---|
+| Frontend | Streamlit |
+| Vector DB | ChromaDB (local, pre-built) |
+| Embeddings | `all-MiniLM-L6-v2` (sentence-transformers) |
+| LLM | LLaMA 3.1 8B via Groq API |
+| Scraping | requests + BeautifulSoup |
 
-## Architecture
+---
 
-- **Frontend**: Streamlit
-- **Vector Database**: ChromaDB (Local)
-- **LLM**: LLaMA 3.1 via Groq API
-- **Embeddings**: HuggingFace sentence transformers
+## Local setup
+
+```bash
+git clone https://github.com/Anish0104/DocPilot.git
+cd DocPilot
+```
+
+```bash
+python -m venv venv
+source venv/bin/activate        # macOS/Linux
+# venv\Scripts\activate         # Windows
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file in the project root:
+
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+Get a free key at [console.groq.com](https://console.groq.com).
+
+```bash
+streamlit run app.py
+```
+
+---
+
+## Project structure
+
+```
+DocPilot/
+├── app.py              # Streamlit UI
+├── src/
+│   ├── ingest.py       # Scrapes and indexes documentation
+│   ├── retriever.py    # Semantic search against ChromaDB
+│   ├── generator.py    # RAG pipeline + Groq LLM call
+│   └── utils.py        # Env loading, text chunking helpers
+├── data/
+│   └── chromadb/       # Pre-built vector store (committed)
+└── requirements.txt
+```
+
+---
 
 ## License
-MIT License
+
+MIT
